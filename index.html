@@ -1,0 +1,84 @@
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+</head>
+<body>
+<textarea class="texto"></textarea>
+
+</body>
+
+
+
+<script>
+$(document).ready(function() {
+	$('.texto').change(function(){
+		var field = $(this).val();
+		var getDensity = $.getDensity(field);
+		$.showList(getDensity);
+	})
+});
+ 
+ $.getDensity = function(text){
+ 	var list;
+ 	var result;
+ 	var arr;
+ 	arr = $.toArray(text);
+ 	list = $.wordList(arr);
+ 	result = $.density(text, list);
+ 	return result;
+ 	
+ }
+
+ $.density = function (text, array){
+ 	var counter = 0 ;
+ 	var density = 0 ;
+ 	var wordsDensity = new Array;
+ 	var text = $.toArray(text);
+ 	var val;
+ 	for(var i=0;i<array.length;i++) {	
+ 		counter = $.count(text, array[i]);
+ 		density = ((counter * 100) / text.length);
+ 		val = array[i] ;
+ 		if(density > 30)
+ 			wordsDensity.push(val + '-' + density);
+ 	}
+ 	return wordsDensity;
+ }
+
+ $.count = function (array, value) {
+  var counter = 0;
+  for(var i=0;i<array.length;i++) {
+    if (array[i] === value) counter++;
+  }
+  return counter;
+}
+
+$.toArray = function(text){
+	var arr;
+	arr = text.split(' ');
+	return arr;
+
+}
+
+$.wordList = function(array){
+	var newArray;
+	newArray = $.unique(array);
+	return newArray;
+}
+
+$.showList = function(array){
+	$.each(array, function(index, val) {
+    console.log(val);
+});
+}
+
+$.wordCounter =function(text){
+	var arr;
+	arr = $.toArray(text);
+	return arr.length;
+}
+
+
+</script>
+
+</html>
