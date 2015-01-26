@@ -1,84 +1,177 @@
-<html>
-<head>
-<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
-</head>
-<body>
-<textarea class="texto"></textarea>
 
-</body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 101 Template</title>
 
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="#">Jeff's KeyWord Density</a>
+	    </div>
 
-<script>
-$(document).ready(function() {
-	$('.texto').change(function(){
-		var field = $(this).val();
-		var getDensity = $.getDensity(field);
-		$.showList(getDensity);
-	})
-});
- 
- $.getDensity = function(text){
- 	var list;
- 	var result;
- 	var arr;
- 	arr = $.toArray(text);
- 	list = $.wordList(arr);
- 	result = $.density(text, list);
- 	return result;
- 	
- }
-
- $.density = function (text, array){
- 	var counter = 0 ;
- 	var density = 0 ;
- 	var wordsDensity = new Array;
- 	var text = $.toArray(text);
- 	var val;
- 	for(var i=0;i<array.length;i++) {	
- 		counter = $.count(text, array[i]);
- 		density = ((counter * 100) / text.length);
- 		val = array[i] ;
- 		if(density > 30)
- 			wordsDensity.push(val + '-' + density);
- 	}
- 	return wordsDensity;
- }
-
- $.count = function (array, value) {
-  var counter = 0;
-  for(var i=0;i<array.length;i++) {
-    if (array[i] === value) counter++;
-  }
-  return counter;
-}
-
-$.toArray = function(text){
-	var arr;
-	arr = text.split(' ');
-	return arr;
-
-}
-
-$.wordList = function(array){
-	var newArray;
-	newArray = $.unique(array);
-	return newArray;
-}
-
-$.showList = function(array){
-	$.each(array, function(index, val) {
-    console.log(val);
-});
-}
-
-$.wordCounter =function(text){
-	var arr;
-	arr = $.toArray(text);
-	return arr.length;
-}
+	  </div><!-- /.container-fluid -->
+	</nav>
 
 
-</script>
+	<div class="container">
 
+		<div class="row">
+			<div class="col-lg-8 col-md-8">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Basic example</div>
+					<div class="panel-body">
+						<form>
+						  <div class="form-group">
+						    <label for="exampleInputEmail1">Tittle</label>
+						    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+						  </div>
+						  <div class="form-group">
+						  	<textarea class="form-control" rows="15" id="texto"></textarea>
+						  </div>
+						  <button type="submit" class="btn btn-default">Submit</button>
+						</form>
+					</div>
+					<div class="panel-footer"></div>
+				</div>
+			</div>
+
+			<div class=" col-lg-4 col-md-3">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Keyword Density</div>
+					<div class="panel-body bs-example-bg-classes" id="kd-result" >
+						<p class="bg-warning">word density</p>
+					</div>
+					<div class="panel-footer"> It shows you all the words who are beyond the standar 25% of density.</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery-1.11.2.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <script>
+		$(document).ready(function() {
+			$('#texto').change(function(){
+				var field = $(this).val();
+				var getDensity = $.getDensity(field);
+				$.showList(getDensity);
+			})
+		});
+		 
+
+			var HtmlObject = 'p';
+			var ObjectClass = 'bg-danger';
+			var ResultContent = $('#kd-result');
+
+		 $.getDensity = function(text){
+		 	var list;
+		 	var result;
+		 	var arr;
+		 	arr = $.toArray(text);
+		 	list = $.wordList(arr);
+		 	result = $.density(text, list);
+		 	return result;
+		 	
+		 }
+
+		 $.density = function (text, array){
+		 	var counter = 0 ;
+		 	var density = 0 ;
+		 	var wordsDensity = new Array;
+		 	var text = $.toArray(text);
+		 	var val;
+		 	for(var i=0;i<array.length;i++) {	
+		 		counter = $.count(text, array[i]);
+		 		density = Math.round(((counter * 100) / text.length));
+		 		val = array[i] ;
+		 		if(density > 25)
+		 			wordsDensity.push(density + '% ' + val);
+		 	}
+		 	return wordsDensity;
+		 }
+
+		 $.count = function (array, value) {
+		  var counter = 0;
+		  for(var i=0;i<array.length;i++) {
+		    if (array[i] === value) counter++;
+		  }
+		  return counter;
+		}
+
+		$.toArray = function(text){
+			var arr;
+			arr = $.toText(text);
+			arr = arr.split(' ');
+			arr = $.grep(arr,function(n){
+			  return(n);
+			});
+			return arr;
+
+		}
+
+		$.wordList = function(array){
+			var newArray;
+			newArray = $.unique(array);
+			return newArray;
+		}
+
+		$.showList = function(array){
+			$(ResultContent).empty();
+			$.each(array, function(index, val) {
+		    	$.htmlBuilder(val);
+		});
+		}
+
+		$.wordCounter =function(text){
+			var arr;
+			arr = $.toArray(text);
+			return arr.length;
+		}
+
+		$.htmlBuilder = function(value){
+
+		newObj = $(document.createElement(HtmlObject)).attr({
+				class : ObjectClass
+			}).appendTo(ResultContent);
+		newObj.append(value);
+		}
+
+		$.toText = function( str ) {
+		    str=str.toString();
+		    return str.replace(/<\/?[^>]+>/gi, '');
+		}
+
+
+
+		</script>
+
+  </body>
 </html>
