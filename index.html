@@ -41,6 +41,8 @@
 
 		<div class="row">
 			<div class="col-lg-8 col-md-8">
+
+				
 				<div class="panel panel-primary">
 					<div class="panel-heading">Basic example</div>
 					<div class="panel-body">
@@ -49,6 +51,8 @@
 						    <label for="exampleInputEmail1">Tittle</label>
 						    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
 						  </div>
+						  <!-- content lenght messages -->
+						  <div class="bs-example-bg-classes  msg-box" id='kd-messages'></div>
 						  <div class="form-group">
 						  	<textarea class="form-control" rows="15" id="texto"></textarea>
 						  </div>
@@ -83,6 +87,7 @@
 				var field = $(this).val();
 				var getDensity = $.getDensity(field);
 				$.showList(getDensity);
+				$.contentAnalize(field);
 			})
 		});
 		 
@@ -169,6 +174,48 @@
 		    return str.replace(/<\/?[^>]+>/gi, '');
 		}
 
+		var messageBox = '#kd-messages';
+		$.contentAnalize = function(text){
+			var arr;
+			var shortMessage = 'It seems to be a little short post.';
+			var medMessage = 'It Looks like a good post.';
+			var longMessage = 'It looks like a Great post! but, be carefull and make sure that all the information is necessary';
+			var shortClass = 'bg-warning';
+			var medClass = 'bg-success';
+			var longClass = 'bg-primary';
+			var message;
+
+			arr = $.toArray(text);			
+
+
+			words = arr.length;
+			if(words < 300){
+				message = shortMessage;
+				msgClass = shortClass;
+			}
+				
+			if(words > 300 && words < 500 ){
+				message = medMessage;
+				msgClass = medClass;
+			}
+				
+			if(words > 500){
+				message = longMessage;
+				msgClass = longClass;
+			}
+				
+
+			$.buildMessage(message, msgClass);
+		}
+
+
+		$.buildMessage = function(message, msgClass){
+			$(messageBox).empty();
+			newObj = $(document.createElement('p')).attr({
+				class : msgClass
+			}).appendTo(messageBox);
+			newObj.append(message);
+		}
 
 
 		</script>
