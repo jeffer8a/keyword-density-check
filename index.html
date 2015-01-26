@@ -48,12 +48,23 @@
 					<div class="panel-body">
 						<form>
 						  <div class="form-group">
-						    <label for="exampleInputEmail1">Tittle</label>
-						    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+							  <!-- title lenght messages -->
+							  <div class="bs-example-bg-classes  msg-box" id='kd-messages-title'></div>
+						    <label for="title">Tittle</label>
+						    <input type="text" class="form-control" id="title" >
 						  </div>
-						  <!-- content lenght messages -->
-						  <div class="bs-example-bg-classes  msg-box" id='kd-messages'></div>
+
 						  <div class="form-group">
+						  <!-- title lenght messages -->
+							  <div class="bs-example-bg-classes  msg-box" id='kd-messages-description'></div>
+						    <label for="description">Description</label>
+						    <textarea class="form-control" id="description" rows="3"></textarea>
+						  </div>
+
+						  <!-- content lenght messages -->
+						  <div class="bs-example-bg-classes  msg-box" id='kd-messages-content'></div>
+						  <div class="form-group">
+						  	<label for="texto">Content</label>
 						  	<textarea class="form-control" rows="15" id="texto"></textarea>
 						  </div>
 						  <button type="submit" class="btn btn-default">Submit</button>
@@ -88,7 +99,13 @@
 				var getDensity = $.getDensity(field);
 				$.showList(getDensity);
 				$.contentAnalize(field);
-			})
+			});
+			$('#title').change(function(){
+				$.titleAnalize($(this).val());
+			});
+			$('#description').change(function(){
+				$.descriptionAnalize($(this).val());
+			});
 		});
 		 
 
@@ -174,7 +191,7 @@
 		    return str.replace(/<\/?[^>]+>/gi, '');
 		}
 
-		var messageBox = '#kd-messages';
+		var contentMsgBox = '#kd-messages-content';
 		$.contentAnalize = function(text){
 			var arr;
 			var shortMessage = 'It seems to be a little short post.';
@@ -184,36 +201,85 @@
 			var medClass = 'bg-success';
 			var longClass = 'bg-primary';
 			var message;
-
 			arr = $.toArray(text);			
-
-
 			words = arr.length;
 			if(words < 300){
 				message = shortMessage;
 				msgClass = shortClass;
 			}
-				
 			if(words > 300 && words < 500 ){
 				message = medMessage;
 				msgClass = medClass;
 			}
-				
 			if(words > 500){
 				message = longMessage;
 				msgClass = longClass;
 			}
-				
-
-			$.buildMessage(message, msgClass);
+			$.buildMessage(message, msgClass, contentMsgBox);
 		}
 
 
-		$.buildMessage = function(message, msgClass){
-			$(messageBox).empty();
+		var titleMsgBox = '#kd-messages-title';
+		$.titleAnalize = function(title){
+			var shortMessage = 'It seems to be a little short title.';
+			var medMessage = 'It Looks like a good title.';
+			var longMessage = 'Seems to be a little long title, make it short for better results.';
+			var shortClass = 'bg-warning';
+			var medClass = 'bg-success';
+			var longClass = 'bg-danger';
+			var message;
+			var chars;
+
+			chars = title.length;
+			console.log(chars);
+			if(chars < 60){
+				message = shortMessage;
+				msgClass = shortClass;
+			}
+			if(chars > 60 && chars < 67 ){
+				message = medMessage;
+				msgClass = medClass;
+			}
+			if(chars > 67){
+				message = longMessage;
+				msgClass = longClass;
+			}
+			$.buildMessage(message, msgClass, titleMsgBox);
+		}
+
+		var descriptionMsgBox = '#kd-messages-description';
+		$.descriptionAnalize = function(description){
+			var shortMessage = 'It seems to be a little short description.';
+			var medMessage = 'It Looks like a good description.';
+			var longMessage = 'Seems to be a little long description, make it short for better results.';
+			var shortClass = 'bg-warning';
+			var medClass = 'bg-success';
+			var longClass = 'bg-danger';
+			var message;
+			var chars;
+
+			chars = description.length;
+			if(chars < 150){
+				message = shortMessage;
+				msgClass = shortClass;
+			}
+			if(chars > 150 && chars < 155 ){
+				message = medMessage;
+				msgClass = medClass;
+			}
+			if(chars > 155){
+				message = longMessage;
+				msgClass = longClass;
+			}
+			$.buildMessage(message, msgClass, descriptionMsgBox);
+		}
+
+
+		$.buildMessage = function(message, msgClass, box){
+			$(box).empty();
 			newObj = $(document.createElement('p')).attr({
 				class : msgClass
-			}).appendTo(messageBox);
+			}).appendTo(box);
 			newObj.append(message);
 		}
 
